@@ -1,0 +1,39 @@
+{
+  "name": "@remixblog/github-mdx-source",
+  "description": "Internal, shared utilities",
+  "author": "Joel Hooks",
+  "version": "0.0.1",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "test": "jest",
+    "dev": "tsc -w",
+    "build": "tsc",
+    "lint": "TIMING=1 eslint src --fix",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "devDependencies": {
+    "@remixblog/tsconfig": "workspace:*",
+    "typescript": "^4.5.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "jest": {
+    "preset": "@remixblog/scripts/jest/node"
+  },
+  "gitHead": "3398ceeb143d5fddcf11268741c2747856814119",
+  "dependencies": {
+    "hast-util-to-string": "^2.0.0",
+    "rehype-document": "^6.0.0",
+    "rehype-format": "^4.0.0",
+    "rehype-parse": "^8.0.3",
+    "rehype-stringify": "^9.0.2",
+    "remark-parse": "^10.0.1",
+    "remark-rehype": "^10.0.1",
+    "unified": "^10.1.1"
+  }
+}

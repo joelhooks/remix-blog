@@ -18,7 +18,7 @@ import {
   getImgProps,
   getSocialImageWithPreTitle,
 } from '~/images'
-import {markdownToHtmlUnwrapped, stripHtml} from './markdown.server'
+import {markdownToHtmlUnwrapped, stripHtml} from '@remixblog/github-mdx-source'
 import Title from '~/components/mdx/Title'
 import Subtitle from '~/components/mdx/Subtitle'
 import Paragraph from '~/components/mdx/Paragraph'

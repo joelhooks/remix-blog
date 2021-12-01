@@ -1,9 +1,6 @@
 # base node image
 FROM node:16-bullseye-slim as base
 
-# install open ssl for prisma and ffmpeg for the call kent functionality
-RUN apt-get update && apt-get install -y openssl ffmpeg
-
 # install all node_modules, including dev
 FROM base as deps
 
@@ -13,11 +10,12 @@ ENV HUSKY_SKIP_INSTALL=1
 RUN mkdir /app/
 WORKDIR /app/
 
-ADD package.json package-lock.json .npmrc ./
+ADD package.json .npmrc ./
 ADD other/patches ./other/patches
-RUN npm install --production=false
-# TODO: enable this again. It was having trouble with v1 of Remix
-# RUN npx metronome setup
+RUN npm install -g pnpm
+RUN npm i -g turbo
+RUN turbo prune --scope=joelhooks-remix
+RUN pnpm install --production=false
 
 # setup production node_modules
 FROM base as production-deps
@@ -26,8 +24,8 @@ RUN mkdir /app/
 WORKDIR /app/
 
 COPY --from=deps /app/node_modules /app/node_modules
-ADD package.json package-lock.json .npmrc /app/
-RUN npm prune --production
+ADD package.json .npmrc /app/
+RUN pnpm prune --production
 
 # build app
 FROM base as build
@@ -42,7 +40,7 @@ COPY --from=deps /app/node_modules /app/node_modules
 
 # app code changes all the time
 ADD . .
-RUN npm run build
+RUN pnpm -w build
 
 # build smaller image for running
 FROM base
@@ -53,10 +51,9 @@ RUN mkdir /app/
 WORKDIR /app/
 
 COPY --from=production-deps /app/node_modules /app/node_modules
-COPY --from=build /app/node_modules/.prisma /app/node_modules/.prisma
 COPY --from=build /app/build /app/build
 COPY --from=build /app/public /app/public
 COPY --from=build /app/server-build /app/server-build
 ADD . .
 
-CMD ["npm", "run", "start"]
+CMD ["pnpm", "start"]
