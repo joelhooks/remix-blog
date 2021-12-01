@@ -1,0 +1,68 @@
+{
+  "name": "remix-blog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "turbo": "^0.8.5"
+  },
+  "turbo": {
+    "baseBranch": "origin/main",
+    "pipeline": {
+      "build": {
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "dist/**",
+          ".next/**",
+          "!.next/cache/**/*"
+        ]
+      },
+      "postbuild": {
+        "dependsOn": [
+          "build"
+        ],
+        "outputs": [
+          "public/sitemap.xml",
+          "public/robots.txt"
+        ]
+      },
+      "test": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "deploy": {
+        "dependsOn": [
+          "build",
+          "test",
+          "lint"
+        ]
+      },
+      "lint": {
+        "outputs": [],
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "start": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "dev": {
+        "cache": false
+      },
+      "clean": {
+        "cache": false
+      }
+    }
+  }
+}
